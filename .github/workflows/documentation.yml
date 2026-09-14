@@ -1,0 +1,62 @@
+Ahname: Publicar documentacion
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Instalar DocFX
+        shell: pwsh
+        run: dotnet tool update -g docfx
+
+      - name: Generar referencia API desde XML
+        shell: pwsh
+        run: >-
+          pwsh -File Documentation/generate-api-md.ps1
+          -XmlPath Assets/Documentation/Isai.Enemies.xml
+          -OutputPath Documentation/api/index.md
+
+      - name: Construir sitio
+        shell: pwsh
+        run: docfx Documentation/docfx.json
+
+      - name: Preparar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir artefacto
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: Documentation/_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
