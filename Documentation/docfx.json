@@ -1,0 +1,35 @@
+{
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.md",
+          "**/toc.yml",
+          "api/**/*.yml"
+        ],
+        "src": "."
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "**/*.png",
+          "**/*.jpg",
+          "**/*.svg"
+        ],
+        "src": "."
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern"
+    ],
+    "globalMetadata": {
+      "_appTitle": "Sistema modular de enemigos",
+      "_appFooter": "Documentacion tecnica del sistema de enemigos",
+      "_enableSearch": true,
+      "pdf": false
+    }
+  }
+}

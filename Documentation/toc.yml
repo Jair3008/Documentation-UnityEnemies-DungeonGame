@@ -1,0 +1,16 @@
+- name: Inicio
+  href: index.md
+- name: Arquitectura
+  href: arquitectura.md
+- name: Ciclo de vida
+  href: ciclo-de-vida.md
+- name: Combate
+  href: combate.md
+- name: Movimiento y estados
+  href: movimiento-y-estados.md
+- name: Datos y configuracion
+  href: datos-y-configuracion.md
+- name: Como extenderlo
+  href: extender-el-sistema.md
+- name: Referencia API
+  href: api/toc.yml

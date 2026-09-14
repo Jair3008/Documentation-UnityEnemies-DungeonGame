@@ -1,0 +1,855 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Isai.Enemies</name>
+    </assembly>
+    <members>
+        <member name="T:SO_EnemyStats">
+            <summary>
+            Representa las estadísticas base de un enemigo como un ScriptableObject.
+            </summary>
+        </member>
+        <member name="M:SO_EnemyStats.GetEnemyStats">
+            <summary>
+            Devuelve las estadísticas completas empaquetadas en un struct seguro y sin costo de GC.
+            </summary>
+        </member>
+        <member name="T:IMovement">
+            <summary>
+            Interfaz que define las operaciones y propiedades para el movimiento de una entidad.
+            </summary>
+        </member>
+        <member name="P:IMovement.CurrentDestination">
+            <summary>
+            Obtiene el destino actual del movimiento, si existe.
+            </summary>
+        </member>
+        <member name="P:IMovement.CurrentPath">
+            <summary>
+            Obtiene la ruta de navegación actual del NavMesh.
+            </summary>
+        </member>
+        <member name="P:IMovement.HasDestination">
+            <summary>
+            Obtiene un booleano verdadero si existe un destino o path
+            </summary>
+        </member>
+        <member name="M:IMovement.Move2Target(UnityEngine.Transform)">
+            <summary>
+            Mueve la entidad hacia el objetivo especificado.
+            </summary>
+            <param name="target">El transform del objetivo.</param>
+        </member>
+        <member name="M:IMovement.Move2Target(UnityEngine.Vector3)">
+            <summary>
+            Mueve la entidad hacia la posición destino especificada.
+            </summary>
+            <param name="target">La posición destino en coordenadas del mundo.</param>
+        </member>
+        <member name="M:IMovement.StopMovement">
+            <summary>
+            Detiene temporalmente el movimiento de la entidad.
+            </summary>
+        </member>
+        <member name="M:IMovement.ResumeMovement">
+            <summary>
+            Reanuda el movimiento previamente detenido de la entidad.
+            </summary>
+        </member>
+        <member name="M:IMovement.CleanMovement">
+            <summary>
+            Limpia por completo el estado del movimiento actual.
+            </summary>
+        </member>
+        <member name="M:IMovement.HasReached">
+            <summary>
+            Verifica si la entidad ha llegado a su destino.
+            </summary>
+            <returns>True si ha llegado al destino, de lo contrario False.</returns>
+        </member>
+        <member name="M:IMovement.GetRemainDistance">
+            <summary>
+            Obtiene la distancia restante en el camino actual hacia el destino.
+            </summary>
+            <returns>La distancia restante como float.</returns>
+        </member>
+        <member name="M:IMovement.GetDistanceFromTarget">
+            <summary>
+            Obtiene la distancia en línea recta desde la entidad hasta el objetivo.
+            </summary>
+            <returns>La distancia hacia el objetivo.</returns>
+        </member>
+        <member name="M:IMovement.TryGetDestination(UnityEngine.Vector3@)">
+            <summary>
+            Intenta obtener el destino de movimiento actual.
+            </summary>
+            <param name="destination">La variable donde se almacenará el destino en caso de éxito.</param>
+            <returns>True si se obtuvo con éxito, de lo contrario False.</returns>
+        </member>
+        <member name="M:IMovement.TryGetPath(UnityEngine.AI.NavMeshPath@)">
+            <summary>
+            Intenta obtener la ruta de navegación actual.
+            </summary>
+            <param name="path">La variable donde se almacenará la ruta en caso de éxito.</param>
+            <returns>True si se obtuvo con éxito, de lo contrario False.</returns>
+        </member>
+        <member name="F:Enum_VfxVariant.Dark">
+            <summary>Variante asociada a efectos oscuros.</summary>
+        </member>
+        <member name="F:Enum_VfxVariant.Earth">
+            <summary>Variante asociada a efectos de tierra.</summary>
+        </member>
+        <member name="F:Enum_VfxVariant.Electric">
+            <summary>Variante asociada a efectos eléctricos.</summary>
+        </member>
+        <member name="F:Enum_VfxVariant.Fire">
+            <summary>Variante asociada a efectos de fuego.</summary>
+        </member>
+        <member name="F:Enum_VfxVariant.Generic">
+            <summary>Variante genérica sin un elemento específico.</summary>
+        </member>
+        <member name="F:Enum_VfxVariant.Ice">
+            <summary>Variante asociada a efectos de hielo.</summary>
+        </member>
+        <member name="F:Enum_VfxVariant.Nature">
+            <summary>Variante asociada a efectos de naturaleza.</summary>
+        </member>
+        <member name="F:Enum_VfxVariant.Sound">
+            <summary>Variante asociada a efectos de sonido.</summary>
+        </member>
+        <member name="F:Enum_VfxVariant.Void">
+            <summary>Variante asociada a efectos del vacío.</summary>
+        </member>
+        <member name="F:Enum_VfxVariant.Water">
+            <summary>Variante asociada a efectos de agua.</summary>
+        </member>
+        <member name="T:IAttackData">
+            <summary>
+            Interfaz que define las propiedades necesarias para el ataque de un enemigo.
+            </summary>
+        </member>
+        <member name="P:IAttackData.Range">
+            <summary>
+            Obtiene el rango de alcance del ataque.
+            </summary>
+        </member>
+        <member name="P:IAttackData.Cooldown">
+            <summary>
+            Obtiene el tiempo de enfriamiento (cooldown) del ataque en segundos.
+            </summary>
+        </member>
+        <member name="P:IAttackData.AttackDamage">
+            <summary>
+            Obtiene el daño que inflige el ataque.
+            </summary>
+        </member>
+        <member name="P:IAttackData.NameAttack">
+            <summary>
+            Obtiene el nombre del ataque.
+            </summary>
+        </member>
+        <member name="P:IAttackData.AttackDuration">
+            <summary>
+            Obtiene la duración del ataque
+            </summary>
+        </member>
+        <member name="F:Struct_CombatAtkList.AttackType">
+            <summary>
+            Tipo de ataque que se ejecutará.
+            </summary>
+        </member>
+        <member name="F:Struct_CombatAtkList.VFX">
+            <summary>
+            Variante del efecto visual que acompañará al ataque.
+            </summary>
+        </member>
+        <member name="M:Struct_CombatAtkList.#ctor(Enum_AtkList,Enum_VfxVariant)">
+            <summary>
+            Inicializa una nueva configuración de ataque.
+            </summary>
+            <param name="type">Tipo de ataque.</param>
+            <param name="vfx">Variante del efecto visual.</param>
+        </member>
+        <member name="F:Enum_EnemyStates.Idle">
+            <summary>
+            Estado de inactividad o espera.
+            </summary>
+        </member>
+        <member name="F:Enum_EnemyStates.Combat">
+            <summary>
+            Estado de combate o ataque.
+            </summary>
+        </member>
+        <member name="F:Enum_EnemyStates.Returning">
+            <summary>
+            Estado de retorno a la posición de origen.
+            </summary>
+        </member>
+        <member name="F:Enum_EnemyStates.None">
+            <summary>
+            Ningún estado asignado.
+            </summary>
+        </member>
+        <member name="T:SO_SkillData">
+            <summary>
+            ScriptableObject que centraliza los parámetros reutilizables de una habilidad de combate.
+            </summary>
+        </member>
+        <member name="F:SO_SkillData.SkillDamage">
+            <summary>Daño propio de la habilidad.</summary>
+        </member>
+        <member name="F:SO_SkillData.SkillCooldown">
+            <summary>Tiempo de enfriamiento de la habilidad, expresado en segundos.</summary>
+        </member>
+        <member name="F:SO_SkillData.SkillRange">
+            <summary>Distancia máxima a la que puede alcanzar la habilidad.</summary>
+        </member>
+        <member name="F:SO_SkillData.SkillDuration">
+            <summary>Duración activa de la habilidad, expresada en segundos.</summary>
+        </member>
+        <member name="F:SO_SkillData.SkillSelfDestructionTimer">
+            <summary>Tiempo máximo antes de destruir automáticamente el objeto de la habilidad.</summary>
+        </member>
+        <member name="F:SO_SkillData.ShouldDestroyUponCollision">
+            <summary>Indica si la habilidad debe destruirse al colisionar.</summary>
+        </member>
+        <member name="F:SO_SkillData.ShouldDestroyWhenVfxEnd">
+            <summary>Indica si la habilidad debe destruirse cuando termina su VFX.</summary>
+        </member>
+        <member name="F:SO_SkillData.ShouldFollow">
+            <summary>Indica si el objeto de la habilidad debe permanecer unido a su spawner.</summary>
+        </member>
+        <member name="F:SO_SkillData.CanDealDamage">
+            <summary>Indica si la habilidad puede infligir daño.</summary>
+        </member>
+        <member name="F:SO_SkillData.VfxOffset">
+            <summary>Desplazamiento local del VFX respecto a la habilidad.</summary>
+        </member>
+        <member name="F:SO_SkillData.VfxScale">
+            <summary>Escala aplicada al VFX instanciado.</summary>
+        </member>
+        <member name="F:SO_SkillData.VfxList">
+            <summary>Lista de variantes visuales disponibles para la habilidad.</summary>
+        </member>
+        <member name="T:IHealth">
+            <summary>
+            Define la interfaz para el manejo de la salud de una entidad.
+            </summary>
+        </member>
+        <member name="P:IHealth.CurrentHealth">
+            <summary>
+            Obtiene la salud actual de la entidad.
+            </summary>
+        </member>
+        <member name="M:IHealth.StartHealing">
+            <summary>
+            Inicia el proceso de curación de la entidad.
+            </summary>
+        </member>
+        <member name="M:IHealth.StopHealing">
+            <summary>
+            Detiene el proceso de curación de la entidad.
+            </summary>
+        </member>
+        <member name="M:IHealth.Kill">
+            <summary>
+            Mata inmediatamente a la entidad.
+            </summary>
+        </member>
+        <member name="M:IHealth.ChangeHealth(System.Int32)">
+            <summary>
+            Modifica la salud actual por la cantidad especificada.
+            </summary>
+            <param name="health">El valor a sumar o restar a la salud actual.</param>
+        </member>
+        <member name="E:IHealth.OnHealthChanged">
+            <summary>
+            Evento que se dispara cuando el valor de la salud cambia.
+            </summary>
+        </member>
+        <member name="E:IHealth.OnDead">
+            <summary>
+            Evento que se dispara cuando la entidad muere.
+            </summary>
+        </member>
+        <member name="T:IData`1">
+            <summary>
+            Contrato genérico para componentes que manejan o exponen un contenedor de datos de tipo <typeparamref name="TData"/>.
+            </summary>
+            <typeparam name="TData">El struct o tipo de dato concreto (ej. EnemyStatsData, PlayerSaveData).</typeparam>
+        </member>
+        <member name="M:IData`1.GetData">
+            <summary>
+            Obtiene una copia de los datos actuales.
+            </summary>
+        </member>
+        <member name="M:IData`1.SetData(`0)">
+            <summary>
+            Actualiza los datos actuales por completo.
+            </summary>
+            <param name="newData">La nueva estructura de datos.</param>
+        </member>
+        <member name="E:IData`1.OnDataChanged">
+            <summary>
+            Evento que se dispara cuando los datos cambian.
+            </summary>
+        </member>
+        <member name="T:EnemyAnim">
+            <summary>
+            Especialización del sistema de animación para los estados propios de un enemigo.
+            </summary>
+        </member>
+        <member name="T:IDealDamage">
+            <summary>
+            Interfaz [ IDealDamage ]: Expone el método DealDamage() para obtener el daño final que el objeto puede producir.
+            </summary>
+        </member>
+        <member name="M:IDealDamage.DealDamage">
+            <summary>
+            Método que retorna el daño final que el objeto puede producir.
+            </summary>
+            <returns>Número entero, cantidad final de daño producido</returns>
+        </member>
+        <member name="E:IDealDamage.OnDamageDealed">
+            <summary>
+            Evento invocado al momento de inflingir daño
+            </summary>
+        </member>
+        <member name="T:ICollider">
+            <summary>
+            Interfaz que expone el comportamiento básico de un colisionador junto a sus métodos y eventos útiles.
+            </summary>
+        </member>
+        <member name="P:ICollider.CurrentCollider">
+            <summary>
+            Obtiene el colisionador actual.
+            </summary>
+        </member>
+        <member name="M:ICollider.EnableCollider">
+            <summary>
+            Activa el colisionador.
+            </summary>
+        </member>
+        <member name="M:ICollider.DisableCollider">
+            <summary>
+            Desactiva el colisionador.
+            </summary>
+        </member>
+        <member name="M:ICollider.TryGetCollider``1(``0@)">
+            <summary>
+            Método para obtener de forma segura el Collider referenciado en su script y comprobar si es del tipo que se busca
+            </summary>
+            <typeparam name="T">Tipo de colisionador</typeparam>
+            <param name="collider">Variable resultante que contiene el colisionador</param>
+            <returns>True si es del tipo que se busca</returns>
+        </member>
+        <member name="E:ICollider.OnObjectEnter">
+            <summary>
+            Evento que se activa cuando un objeto entra en el colisionador.
+            </summary>
+        </member>
+        <member name="E:ICollider.OnObjectExit">
+            <summary>
+            Evento que se activa cuando un objeto sale del colisionador.
+            </summary>
+        </member>
+        <member name="E:ICollider.OnObjectStay">
+            <summary>
+            Evento que se activa cuando un objeto permanece dentro de un collisionador
+            </summary>
+        </member>
+        <member name="T:Struct_EnemyStatsData">
+            <summary>
+            Representa los datos de estadísticas de un enemigo.
+            </summary>
+        </member>
+        <member name="F:Struct_EnemyStatsData.MaxHealth">
+            <summary>
+            La vida máxima del enemigo.
+            </summary>
+        </member>
+        <member name="F:Struct_EnemyStatsData.Speed">
+            <summary>
+            La velocidad de movimiento del enemigo.
+            </summary>
+        </member>
+        <member name="F:Struct_EnemyStatsData.BaseDamage">
+            <summary>
+            El daño base infligido por el enemigo.
+            </summary>
+        </member>
+        <member name="F:Struct_EnemyStatsData.Patience">
+            <summary>
+            La paciencia o tolerancia del enemigo antes de perder el interés.
+            </summary>
+        </member>
+        <member name="M:Struct_EnemyStatsData.#ctor(System.Int32,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Inicializa una nueva instancia de la estructura <see cref="!:EnemyStatsData"/>.
+            </summary>
+            <param name="maxHealth">La vida máxima del enemigo.</param>
+            <param name="speed">La velocidad de movimiento del enemigo.</param>
+            <param name="baseDamage">El daño base del enemigo.</param>
+            <param name="patient">La paciencia del enemigo.</param>
+        </member>
+        <member name="T:BaseEntityStats">
+            <summary>
+            Clase base abstracta que representa las estadísticas de una entidad en el juego.
+            Hereda de ScriptableObject e implementa la interfaz <see cref="T:IEntityStats"/>.
+            </summary>
+        </member>
+        <member name="P:BaseEntityStats.MaxHealth">
+            <summary>
+            Obtiene la salud máxima de la entidad.
+            </summary>
+        </member>
+        <member name="P:BaseEntityStats.Speed">
+            <summary>
+            Obtiene la velocidad de movimiento de la entidad.
+            </summary>
+        </member>
+        <member name="P:BaseEntityStats.BaseDamage">
+            <summary>
+            Obtiene el daño base que inflige la entidad.
+            </summary>
+        </member>
+        <member name="P:BaseEntityStats.Patient">
+            <summary>
+            Obtiene el nivel de paciencia o templanza de la entidad.
+            </summary>
+        </member>
+        <member name="T:ICombat">
+            <summary>
+            Interfaz que define el comportamiento y las propiedades del sistema de combate.
+            </summary>
+        </member>
+        <member name="P:ICombat.CurrentRange">
+            <summary>
+            Obtiene el rango de ataque actual.
+            </summary>
+        </member>
+        <member name="P:ICombat.CurrentAttack">
+            <summary>
+            Obtiene el identificador o nombre del ataque actual.
+            </summary>
+        </member>
+        <member name="P:ICombat.Cooldowns">
+            <summary>
+            Obtiene los tiempos de recarga de las habilidades o ataques.
+            </summary>
+        </member>
+        <member name="M:ICombat.ExecuteAttack(UnityEngine.Transform)">
+            <summary>
+            Ejecuta un ataque utilizando datos específicos.
+            </summary>
+        </member>
+        <member name="M:ICombat.RestoreCooldowns">
+            <summary>
+            Restablece los tiempos de recarga de los ataques.
+            </summary>
+        </member>
+        <member name="M:ICombat.AttackIsReady">
+            <summary>
+            Método para conocer si la habilidad esta disponible
+            </summary>
+            <returns>True si el cooldown del ataque es 0</returns>
+        </member>
+        <member name="M:ICombat.AttackIsReady(System.Int32)">
+            <summary>
+            Método para conocer si la habilidad esta disponible
+            </summary>
+            <returns>True si el cooldown del ataque es 0</returns>
+        </member>
+        <member name="E:ICombat.OnAttackStart">
+            <summary>
+            Evento que se activa cuando comienza un ataque.
+            </summary>
+        </member>
+        <member name="E:ICombat.OnAttackEnd">
+            <summary>
+            Evento que se activa cuando finaliza un ataque.
+            </summary>
+        </member>
+        <member name="T:BaseAnim`1">
+            <summary>
+            Clase base para controlar animaciones mediante estados genéricos y hashes de Animator.
+            </summary>
+        </member>
+        <member name="M:BaseAnim`1.InitializeAnimHashes">
+            <summary>
+            Mapea automáticamente cada valor del Enum a un Hash de Animator con el mismo nombre.
+            </summary>
+        </member>
+        <member name="M:BaseAnim`1.PlayStateAnimation(`0)">
+            <summary>
+            Transiciona el Animator al estado correspondiente usando el Hash en caché.
+            </summary>
+        </member>
+        <member name="F:Struct_SkillData.Target">
+            <summary>
+            Objetivo al que se dirige la habilidad.
+            </summary>
+        </member>
+        <member name="F:Struct_SkillData.Attacker">
+            <summary>
+            Entidad que ejecuta la habilidad.
+            </summary>
+        </member>
+        <member name="F:Struct_SkillData.Spawner">
+            <summary>
+            Entidad que genera o invoca la habilidad.
+            </summary>
+        </member>
+        <member name="M:Struct_SkillData.#ctor(UnityEngine.Transform,UnityEngine.Transform,UnityEngine.Transform)">
+            <summary>
+            Inicializa los datos de una habilidad.
+            </summary>
+            <param name="target">Objetivo de la habilidad.</param>
+            <param name="attacker">Entidad que ejecuta la habilidad.</param>
+            <param name="spawner">Entidad que genera la habilidad.</param>
+        </member>
+        <member name="T:PiercingSkill">
+            <summary>
+            Habilidad de ataque perforante basada en <see cref="T:BaseSkill"/>.
+            </summary>
+        </member>
+        <member name="F:Struct_VfxList.Style">
+            <summary>
+            Variante visual asociada a este efecto.
+            </summary>
+        </member>
+        <member name="F:Struct_VfxList.Particles">
+            <summary>
+            Objeto del juego que contiene el sistema de partículas.
+            </summary>
+        </member>
+        <member name="M:Struct_VfxList.#ctor(Enum_VfxVariant,UnityEngine.GameObject)">
+            <summary>
+            Inicializa una lista de efectos visuales.
+            </summary>
+            <param name="style">Variante visual del efecto.</param>
+            <param name="particles">Objeto del juego que contiene las partículas.</param>
+        </member>
+        <member name="T:IEnemyBrain`1">
+            <summary>
+            Interfaz que define el comportamiento del cerebro de un enemigo.
+            </summary>
+            <typeparam name="T">El tipo de enumerado que representa los estados del enemigo.</typeparam>
+        </member>
+        <member name="P:IEnemyBrain`1.Target">
+            <summary>
+            Obtiene el objetivo actual del enemigo.
+            </summary>
+        </member>
+        <member name="M:IEnemyBrain`1.ChangeState(`0)">
+            <summary>
+            Cambia el estado actual del enemigo.
+            </summary>
+            <param name="newState">El nuevo estado a aplicar.</param>
+        </member>
+        <member name="M:IEnemyBrain`1.ChangeState(`0,UnityEngine.Transform)">
+            <summary>
+            Cambia el estado actual del enemigo y asigna un nuevo objetivo.
+            </summary>
+            <param name="newState">El nuevo estado a aplicar.</param>
+            <param name="target">El nuevo objetivo a seguir.</param>
+        </member>
+        <member name="M:IEnemyBrain`1.ChangeTarget(UnityEngine.Transform)">
+            <summary>
+            Cambia el objetivo actual del enemigo.
+            </summary>
+            <param name="target">El nuevo objetivo a asignar.</param>
+        </member>
+        <member name="M:IEnemyBrain`1.TryGetTarget(UnityEngine.Transform@)">
+            <summary>
+            Intenta obtener el objetivo actual del enemigo.
+            </summary>
+            <param name="target">El parámetro de salida que contendrá el objetivo si se encuentra.</param>
+            <returns>Verdadero si se logró obtener el objetivo; de lo contrario, falso.</returns>
+        </member>
+        <member name="E:IEnemyBrain`1.OnStateChanged">
+            <summary>
+            Evento que se invoca cada vez que un enemigo cambia su estado
+            </summary>
+        </member>
+        <member name="E:IEnemyBrain`1.OnTargetChanged">
+            <summary>
+            Evento que se invoca cada vez que el target del enemigo cambia
+            </summary>
+        </member>
+        <member name="T:Enum_EnemyAnim">
+            <summary>
+            Identifica los estados de animación disponibles para un enemigo.
+            </summary>
+        </member>
+        <member name="T:IPrefabSkill">
+            <summary>
+            Define los datos y la inicialización requeridos por un prefab de habilidad.
+            </summary>
+        </member>
+        <member name="T:Enum_AtkList">
+            <summary>
+            Define los tipos de ataque disponibles para los enemigos.
+            </summary>
+        </member>
+        <member name="F:Enum_AtkList.Dash">
+            <summary>
+            Ataque de embestida rápida hacia el objetivo.
+            </summary>
+        </member>
+        <member name="F:Enum_AtkList.Pierce">
+            <summary>
+            Ataque que atraviesa al objetivo en línea recta.
+            </summary>
+        </member>
+        <member name="T:BaseCollider">
+            <summary>
+            Componente base para filtrar colisiones y exponer eventos de entrada, salida y permanencia.
+            </summary>
+        </member>
+        <member name="T:SlashSkill">
+            <summary>
+            Habilidad de ataque de corte que ajusta el radio de su collider al rango configurado.
+            </summary>
+        </member>
+        <member name="T:EnemyMovement">
+            <summary>
+            Especialización del movimiento de entidades que obtiene su velocidad desde los datos del enemigo.
+            </summary>
+        </member>
+        <member name="T:IBaseATK">
+            <summary>
+            Define el contrato básico de un ataque ejecutable por una entidad.
+            </summary>
+        </member>
+        <member name="T:EnemyHealth">
+            <summary>
+            Especialización del sistema de salud para enemigos, con estadísticas y daño recibidos desde sus datos.
+            </summary>
+        </member>
+        <member name="T:BaseMovement">
+            <summary>
+            Clase base para el movimiento de entidades utilizando un <see cref="T:UnityEngine.AI.NavMeshAgent"/>.
+            Implementa la interfaz <see cref="T:IMovement"/> para proporcionar control de navegación y rutas.
+            </summary>
+        </member>
+        <member name="F:BaseMovement._canDebug">
+            <summary>
+            Indica si se deben habilitar las funciones de depuración y visualización en el editor.
+            </summary>
+        </member>
+        <member name="F:BaseMovement._pathColor">
+            <summary>
+            Color de la línea que representa el camino (path) en la depuración de Gizmos.
+            </summary>
+        </member>
+        <member name="F:BaseMovement._nodeColor">
+            <summary>
+            Color de las esferas que representan los nodos del camino en la depuración de Gizmos.
+            </summary>
+        </member>
+        <member name="P:BaseMovement.CurrentDestination">
+            <inheritdoc />
+        </member>
+        <member name="P:BaseMovement.CurrentPath">
+            <inheritdoc />
+        </member>
+        <member name="P:BaseMovement.HasDestination">
+            <inheritdoc />
+        </member>
+        <member name="F:BaseMovement._agent">
+            <summary>
+            Referencia interna en caché al componente <see cref="T:UnityEngine.AI.NavMeshAgent"/>.
+            </summary>
+        </member>
+        <member name="F:BaseMovement._speed">
+            <summary>
+            Velocidad interna en caché para el movimiento de la entidad.
+            </summary>
+        </member>
+        <member name="M:BaseMovement.Awake">
+            <summary>
+            Inicializa las referencias del componente y configura la velocidad inicial.
+            </summary>
+        </member>
+        <member name="M:BaseMovement.Update">
+            <summary>
+            Actualiza el estado del movimiento en cada frame, manejando la depuración si está habilitada.
+            </summary>
+        </member>
+        <member name="M:BaseMovement.CleanMovement">
+            <inheritdoc />
+        </member>
+        <member name="M:BaseMovement.GetDistanceFromTarget">
+            <inheritdoc />
+        </member>
+        <member name="M:BaseMovement.GetRemainDistance">
+            <inheritdoc />
+        </member>
+        <member name="M:BaseMovement.HasReached">
+            <inheritdoc />
+        </member>
+        <member name="M:BaseMovement.Move2Target(UnityEngine.Transform)">
+            <inheritdoc />
+        </member>
+        <member name="M:BaseMovement.Move2Target(UnityEngine.Vector3)">
+            <inheritdoc />
+        </member>
+        <member name="M:BaseMovement.ResumeMovement">
+            <inheritdoc />
+        </member>
+        <member name="M:BaseMovement.StopMovement">
+            <inheritdoc />
+        </member>
+        <member name="M:BaseMovement.TryGetDestination(UnityEngine.Vector3@)">
+            <inheritdoc />
+        </member>
+        <member name="M:BaseMovement.TryGetPath(UnityEngine.AI.NavMeshPath@)">
+            <inheritdoc />
+        </member>
+        <member name="M:BaseMovement.ResetDestination">
+            <summary>
+            Restablece el destino actual y limpia el flag que indica si tiene destino.
+            </summary>
+        </member>
+        <member name="M:BaseMovement.OnDrawGizmos">
+            <summary>
+            Dibuja elementos visuales de depuración en la vista de Escena de Unity, como la ruta del agente y los nodos de navegación.
+            </summary>
+        </member>
+        <member name="T:EnemyCombatFacade">
+            <summary>
+            Gestiona la selección rotativa de habilidades, sus cooldowns y la duración de cada ataque.
+            </summary>
+        </member>
+        <member name="T:EnemyData">
+            <summary>
+            Mantiene y distribuye las estadísticas actuales de un enemigo a través de eventos de cambio.
+            </summary>
+        </member>
+        <member name="T:EnemyCombat">
+            <summary>
+            Coordina la ejecución de ataques del enemigo y comunica sus eventos de inicio y finalización.
+            </summary>
+        </member>
+        <member name="T:EnemyBrain">
+            <summary>
+            Controla la máquina de estados del enemigo, sus objetivos, movimiento, combate y retorno a su posición inicial.
+            </summary>
+        </member>
+        <member name="T:IEntityStats">
+            <summary>
+            Define las estadísticas básicas de una entidad en el juego.
+            </summary>
+        </member>
+        <member name="P:IEntityStats.MaxHealth">
+            <summary>
+            Obtiene la salud máxima de la entidad.
+            </summary>
+        </member>
+        <member name="P:IEntityStats.Speed">
+            <summary>
+            Obtiene la velocidad de movimiento de la entidad.
+            </summary>
+        </member>
+        <member name="P:IEntityStats.BaseDamage">
+            <summary>
+            Obtiene el daño base que inflige la entidad.
+            </summary>
+        </member>
+        <member name="P:IEntityStats.Patient">
+            <summary>
+            Obtiene la paciencia de la entidad: Tiempo que puede estar fuera de su área de spawn
+            </summary>
+        </member>
+        <member name="T:BaseHealth">
+            <summary>
+            Componente base para administrar salud, daño, muerte y curación gradual de una entidad.
+            </summary>
+        </member>
+        <member name="T:ITakeDamage">
+            <summary>
+            Interfaz [ ITakeDamage ]: Expone el método TakeDamage() para recibir daño
+            </summary>
+        </member>
+        <member name="M:ITakeDamage.TakeDamage(System.Int32)">
+            <summary>
+            Método para recibir daño de objetos con la interfaz de [ IDealDamage ]
+            </summary>
+            <param name="damage">Número entero, representa la cantidad de daño inflingido</param>
+        </member>
+        <member name="E:ITakeDamage.OnDamaged">
+            <summary>
+            Evento invocado al sufrir daño
+            </summary>
+        </member>
+        <member name="F:Struct_CombatSkillList.AttackType">
+            <summary>
+            Tipo de ataque asociado a la habilidad.
+            </summary>
+        </member>
+        <member name="F:Struct_CombatSkillList.Skill">
+            <summary>
+            Objeto de Unity que representa la habilidad.
+            </summary>
+        </member>
+        <member name="M:Struct_CombatSkillList.#ctor(Enum_AtkList,BaseSkill)">
+            <summary>
+            Inicializa una nueva instancia con el tipo de ataque y la habilidad especificados.
+            </summary>
+            <param name="type">Tipo de ataque asociado.</param>
+            <param name="skill">Objeto de Unity que representa la habilidad.</param>
+        </member>
+        <member name="T:Enum_EnemyStats">
+            <summary>
+            Identifica las categorías de estadísticas que pueden modificarse en un enemigo.
+            </summary>
+        </member>
+        <member name="T:BaseSkill">
+            <summary>
+            Clase base para las habilidades de combate instanciables, incluyendo daño, VFX, colisiones y autodestrucción.
+            </summary>
+        </member>
+        <member name="T:Struct_FinalCombatData">
+            <summary>
+            Contiene la configuración final de una habilidad después de asociar un ataque con su prefab y VFX.
+            </summary>
+        </member>
+        <member name="T:IAnim`1">
+            <summary>
+            Interfaz [ IAnim ]: Expone la animación actual, sus métodos para manejarlos y el evento que se invoca al cambiar de animación
+            </summary>
+            <typeparam name="T">Enum con los estados posibles de animacion, por ejemplo, Idle, Walking, Running, Dead, Etcétera</typeparam>
+        </member>
+        <member name="P:IAnim`1.CurrentState">
+            <summary>
+            El estado de animación actual
+            </summary>
+        </member>
+        <member name="M:IAnim`1.ChangeState(`0)">
+            <summary>
+            Método para transicionar entre estados
+            </summary>
+            <param name="newState"></param>
+        </member>
+        <member name="M:IAnim`1.ToggleAnim(System.Int32,System.Boolean)">
+            <summary>
+            Método para cambiar el parámetro de animación del Animator
+            </summary>
+            <param name="hash">Hash (int) del parámetro de animación</param>
+            <param name="state">True o False</param>
+        </member>
+        <member name="M:IAnim`1.ToggleAnim(System.String,System.Boolean)">
+            <summary>
+            Método para cambiar el parámetro de animación del Animator
+            </summary>
+            <param name="name">Nombre del parámetro de animación</param>
+            <param name="state">True o False</param>
+        </member>
+        <member name="E:IAnim`1.OnAnimChanged">
+            <summary>
+            Evento que se invoca cuando la animación cambia
+            </summary>
+        </member>
+    </members>
+</doc>
