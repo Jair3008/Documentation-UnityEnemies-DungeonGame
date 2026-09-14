@@ -1,4 +1,4 @@
-Ahname: Publicar documentacion
+name: Publicar documentacion
 
 on:
   push:
